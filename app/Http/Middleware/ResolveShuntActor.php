@@ -26,29 +26,14 @@ class ResolveShuntActor
             ], 401);
         }
 
-        $organisationId = $request->header('X-Organisation-Id');
-
-        if (! $organisationId) {
-            return new JsonResponse([
-                'message' => 'Organisation context is required.',
-            ], 403);
-        }
-
         try {
             $actor = $this->shuntIdentityClient->resolve(
-                token: $token,
-                activeOrganisationId: $organisationId,
+                token: $token
             );
         } catch (Throwable) {
             return new JsonResponse([
                 'message' => 'Unauthenticated.',
             ], 401);
-        }
-
-        if (! $actor->hasOrganisation($organisationId)) {
-            return new JsonResponse([
-                'message' => 'Invalid organisation context.',
-            ], 403);
         }
 
         $request->attributes->set('yard.actor', $actor);

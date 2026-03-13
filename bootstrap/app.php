@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'shunt.auth' => \App\Http\Middleware\ResolveShuntActor::class,
+            'shunt.org' => \App\Http\Middleware\RequireOrganisation::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

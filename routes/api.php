@@ -32,3 +32,14 @@ Route::middleware('shunt.auth')->group(function () {
         ];
     });
 });
+
+Route::middleware(['shunt.auth', 'shunt.org'])->group(function () {
+    Route::get('/context', function () {
+        return [
+            'data' => [
+                'actor' => current_actor()?->toArray(),
+                'organisation_id' => current_organisation_id(),
+            ],
+        ];
+    });
+});
