@@ -3,8 +3,10 @@
 it('returns the current actor from shunt', function () {
     $this->fakeShuntActor();
 
-    $this->actingAsShuntUser()
-        ->withHeader('X-Organisation-Id', 'org-1')
+    $this->actingAsShuntUser([
+        'scopes' => ['profile.read'],
+    ])
+        ->withOrganisation('org-1')
         ->getJson('/api/me')
         ->assertOk()
         ->assertJsonPath('data.user_id', 'user-123')
@@ -18,13 +20,25 @@ it('rejects requests without a bearer token', function () {
         ->assertUnauthorized();
 });
 
-function makeFakeJwt(array $payload): string
-{
-    $header = base64_encode(json_encode(['alg' => 'none', 'typ' => 'JWT']));
-    $body = base64_encode(json_encode($payload));
+it('rejects requests without organisation context', function () {
+    $this->fakeShuntActor();
 
-    $header = rtrim(strtr($header, '+/', '-_'), '=');
-    $body = rtrim(strtr($body, '+/', '-_'), '=');
+    $this->actingAsShuntUser()
+        ->getJson('/api/me')
+        ->assertForbidden()
+        ->assertJson([
+            'message' => 'Organisation context is required.',
+        ]);
+});
 
-    return $header . '.' . $body . '.';
-}
+it('rejects requests with an organisation the actor does not belong to', function () {
+    $this->fakeShuntActor();
+
+    $this->actingAsShuntUser()
+        ->withOrganisation('org-999')
+        ->getJson('/api/me')
+        ->assertForbidden()
+        ->assertJson([
+            'message' => 'Invalid organisation context.',
+        ]);
+});

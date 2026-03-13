@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests;
+namespace Tests\Helpers;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Testing\TestResponse;
 
 trait ShuntAuth
 {
@@ -13,11 +14,23 @@ trait ShuntAuth
             'name' => 'Test User',
             'email' => 'test@example.com',
             'status' => 'active',
-            'memberships' => [],
+            'memberships' => [
+                [
+                    'id' => 'membership-1',
+                    'role' => 'owner',
+                    'status' => 'active',
+                    'organisation' => [
+                        'id' => 'org-1',
+                        'name' => 'Test Org',
+                        'slug' => 'test-org',
+                        'status' => 'active',
+                    ],
+                ],
+            ],
         ], $overrides);
 
         Http::fake([
-            config('services.shunt.url') . '/api/oauth/me' => Http::response([
+            rtrim(config('yard.shunt.base_url'), '/') . '/api/oauth/me' => Http::response([
                 'data' => $actor,
             ]),
         ]);
@@ -32,6 +45,11 @@ trait ShuntAuth
         ], $jwtPayload));
 
         return $this->withHeader('Authorization', 'Bearer ' . $token);
+    }
+
+    protected function withOrganisation(string $organisationId)
+    {
+        return $this->withHeader('X-Organisation-Id', $organisationId);
     }
 
     protected function makeFakeJwt(array $payload): string

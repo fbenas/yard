@@ -28,6 +28,29 @@ class CurrentActor
         );
     }
 
+    public function hasScope(string $scope): bool
+    {
+        return in_array($scope, $this->scopes, true);
+    }
+
+    public function organisationIds(): array
+    {
+        return array_values(array_filter(array_map(
+            fn (array $membership) => $membership['organisation']['id'] ?? null,
+            $this->memberships,
+        )));
+    }
+
+    public function activeOrganisation(): ?string
+    {
+        return $this->activeOrganisationId;
+    }
+
+    public function hasOrganisation(string $organisationId): bool
+    {
+        return in_array($organisationId, $this->organisationIds(), true);
+    }
+
     public function toArray(): array
     {
         return [

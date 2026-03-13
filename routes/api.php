@@ -12,15 +12,6 @@ Route::get('/health', function () {
 });
 
 Route::middleware('shunt.auth')->group(function () {
-    Route::get('/me', function (Request $request) {
-        /** @var CurrentActor $actor */
-        $actor = $request->attributes->get('yard.actor');
-
-        return [
-            'data' => $actor->toArray(),
-        ];
-    });
-
     Route::get('/version', function () {
         return [
             'app' => config('app.name'),
@@ -31,6 +22,13 @@ Route::middleware('shunt.auth')->group(function () {
     Route::get('/modules', function () {
         return [
             'data' => config('yard.modules', []),
+        ];
+    });
+
+    Route::get('/me', function (Request $request) {
+        /** @var CurrentActor $actor */
+        return [
+            'data' => current_actor()?->toArray(),
         ];
     });
 });

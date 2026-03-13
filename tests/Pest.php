@@ -13,7 +13,7 @@
 
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
-    ->use(Tests\ShuntAuth::class)
+    ->use(Tests\Helpers\ShuntAuth::class)
     ->in('Feature');
 
 /*
