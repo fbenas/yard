@@ -2,18 +2,17 @@
 
 namespace App\Http\Middleware;
 
-use App\Support\Yard\CurrentActor;
+use App\Support\CurrentActor;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Spatie\Permission\PermissionRegistrar;
 
 class RequireOrganisation
 {
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next): JsonResponse
     {
-        /** @var CurrentActor|null $actor */
-        $actor = $request->attributes->get('yard.actor');
+        $actor = $request->attributes->get('api.actor');
 
         if (! $actor) {
             return new JsonResponse([
@@ -35,7 +34,16 @@ class RequireOrganisation
             ], 403);
         }
 
-        $request->attributes->set('yard.actor', CurrentActor::fromShunt(
+        app(PermissionRegistrar::class)->setPermissionsTeamId($organisationId);
+
+        if ($actor->user) {
+            $actor->user->unsetRelation('roles');
+            $actor->user->unsetRelation('permissions');
+        }
+
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+        $request->attributes->set('api.actor', CurrentActor::fromAuth(
             data: [
                 'id' => $actor->userId,
                 'email' => $actor->email,
@@ -45,6 +53,7 @@ class RequireOrganisation
             ],
             scopes: $actor->scopes,
             activeOrganisationId: $organisationId,
+            user: $actor->user,
         ));
 
         return $next($request);

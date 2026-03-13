@@ -1,25 +1,25 @@
 <?php
 
-namespace App\Services\Shunt;
+namespace App\Services\Auth;
 
-use App\Support\Yard\CurrentActor;
+use App\Support\CurrentActor;
 use Illuminate\Support\Facades\Http;
 
-class ShuntIdentityClient
+class AuthIdentityClient
 {
     public function resolve(string $token, ?string $activeOrganisationId = null): CurrentActor
     {
         $response = Http::acceptJson()
-            ->timeout(config('yard.shunt.timeout'))
+            ->timeout(config('api.auth.timeout'))
             ->withToken($token)
-            ->get(rtrim(config('yard.shunt.base_url'), '/') . '/api/oauth/me')
+            ->get(rtrim(config('api.auth.base_url'), '/') . '/api/oauth/me')
             ->throw();
 
         $data = $response->json('data');
 
         $scopes = $this->extractScopesFromToken($token);
 
-        return CurrentActor::fromShunt(
+        return CurrentActor::fromAuth(
             data: $data,
             scopes: $scopes,
             activeOrganisationId: $activeOrganisationId,

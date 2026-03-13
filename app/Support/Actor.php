@@ -13,7 +13,7 @@ class Actor
         public readonly array $scopes = [],
     ) {}
 
-    public static function fromShunt(array $data, array $scopes = []): self
+    public static function fromAuth(array $data, array $scopes = []): self
     {
         return new self(
             id: $data['id'],

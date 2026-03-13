@@ -1,0 +1,5 @@
+{
+    "key": "{{ module }}",
+    "name": "{{ moduleTitle }}",
+    "provider": "Modules\\{{ moduleStudly }}\\Providers\\{{ moduleStudly }}ServiceProvider"
+}

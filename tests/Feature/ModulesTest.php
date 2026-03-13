@@ -2,13 +2,13 @@
 
 it('returns modules when authenticated', function () {
 
-    $this->fakeShuntActor();
+    $this->fakeAuthActor();
 
-    $this->actingAsShuntUser()
+    $this->actingAsAuthUser()
         ->getJson('/api/modules')
         ->assertOk()
-        ->assertJson(config('yard.modules'));
-});
+        ->assertJsonPath('data.0', 'products');
+    });
 
 it('rejects requests without a bearer token', function () {
     $this->getJson('/api/modules')

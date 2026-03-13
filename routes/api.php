@@ -1,6 +1,6 @@
 <?php
 
-use App\Support\Yard\CurrentActor;
+use App\Support\CurrentActor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -11,7 +11,7 @@ Route::get('/health', function () {
     ];
 });
 
-Route::middleware('shunt.auth')->group(function () {
+Route::middleware('auth.auth')->group(function () {
     Route::get('/version', function () {
         return [
             'app' => config('app.name'),
@@ -21,7 +21,7 @@ Route::middleware('shunt.auth')->group(function () {
 
     Route::get('/modules', function () {
         return [
-            'data' => config('yard.modules', []),
+            'data' => config('api.modules', []),
         ];
     });
 
@@ -33,7 +33,7 @@ Route::middleware('shunt.auth')->group(function () {
     });
 });
 
-Route::middleware(['shunt.auth', 'shunt.org'])->group(function () {
+Route::middleware(['auth.auth', 'auth.org'])->group(function () {
     Route::get('/context', function () {
         return [
             'data' => [

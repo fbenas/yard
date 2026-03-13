@@ -1,0 +1,6 @@
+<?php
+
+return [
+    'key' => '{{ module }}',
+    'name' => '{{ moduleTitle }}',
+];

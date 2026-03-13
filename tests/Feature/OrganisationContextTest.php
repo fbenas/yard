@@ -1,9 +1,9 @@
 <?php
 
 it('returns organisation context with valid organisation header', function () {
-    $this->fakeShuntActor();
+    $this->fakeAuthActor();
 
-    $this->actingAsShuntUser()
+    $this->actingAsAuthUser()
         ->withOrganisation('org-1')
         ->getJson('/api/context')
         ->assertOk()
@@ -11,9 +11,9 @@ it('returns organisation context with valid organisation header', function () {
 });
 
 it('rejects organisation context without organisation header', function () {
-    $this->fakeShuntActor();
+    $this->fakeAuthActor();
 
-    $this->actingAsShuntUser()
+    $this->actingAsAuthUser()
         ->getJson('/api/context')
         ->assertForbidden()
         ->assertJson([
@@ -22,9 +22,9 @@ it('rejects organisation context without organisation header', function () {
 });
 
 it('rejects organisation context with invalid organisation header', function () {
-    $this->fakeShuntActor();
+    $this->fakeAuthActor();
 
-    $this->actingAsShuntUser()
+    $this->actingAsAuthUser()
         ->withOrganisation('org-999')
         ->getJson('/api/context')
         ->assertForbidden()

@@ -1,9 +1,9 @@
 <?php
 
-it('returns the current actor from shunt', function () {
-    $this->fakeShuntActor();
+it('returns the current actor from auth', function () {
+    $this->fakeAuthActor();
 
-    $this->actingAsShuntUser([
+    $this->actingAsAuthUser([
         'scopes' => ['profile.read'],
     ])
         ->withOrganisation('org-1')

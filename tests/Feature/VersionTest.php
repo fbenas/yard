@@ -1,9 +1,9 @@
 <?php
 
 it('returns version when authenticated with organisation context', function () {
-    $this->fakeShuntActor();
+    $this->fakeAuthActor();
 
-    $this->actingAsShuntUser()
+    $this->actingAsAuthUser()
         ->getJson('/api/version')
         ->assertOk()
         ->assertJsonPath('app', config('app.name'));

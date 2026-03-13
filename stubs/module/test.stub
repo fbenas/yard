@@ -1,0 +1,5 @@
+<?php
+
+it('{{ module }} module scaffold exists', function () {
+    expect(is_dir(base_path('modules/{{ module }}')))->toBeTrue();
+});

@@ -1,0 +1,5 @@
+{
+    "key": "products",
+    "name": "Products",
+    "provider": "Modules\\Products\\Providers\\ProductsServiceProvider"
+}

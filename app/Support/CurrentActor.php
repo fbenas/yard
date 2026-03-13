@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Support\Yard;
+namespace App\Support;
+
+use App\Models\User;
 
 class CurrentActor
 {
@@ -12,11 +14,16 @@ class CurrentActor
         public readonly array $memberships = [],
         public readonly array $scopes = [],
         public readonly ?string $activeOrganisationId = null,
+        public readonly ?User $user = null,
     ) {
     }
 
-    public static function fromShunt(array $data, array $scopes = [], ?string $activeOrganisationId = null): self
-    {
+    public static function fromAuth(
+        array $data,
+        array $scopes = [],
+        ?string $activeOrganisationId = null,
+        ?User $user = null,
+    ): self {
         return new self(
             userId: $data['id'],
             email: $data['email'],
@@ -25,6 +32,7 @@ class CurrentActor
             memberships: $data['memberships'] ?? [],
             scopes: $scopes,
             activeOrganisationId: $activeOrganisationId,
+            user: $user,
         );
     }
 
@@ -49,6 +57,11 @@ class CurrentActor
     public function hasOrganisation(string $organisationId): bool
     {
         return in_array($organisationId, $this->organisationIds(), true);
+    }
+
+    public function can(string $permission): bool
+    {
+        return $this->user?->can($permission) ?? false;
     }
 
     public function toArray(): array

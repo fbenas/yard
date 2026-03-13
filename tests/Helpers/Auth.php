@@ -2,12 +2,12 @@
 
 namespace Tests\Helpers;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Testing\TestResponse;
 
-trait ShuntAuth
+trait Auth
 {
-    protected function fakeShuntActor(array $overrides = []): array
+    protected function fakeAuthActor(array $overrides = []): array
     {
         $actor = array_merge([
             'id' => 'user-123',
@@ -30,7 +30,7 @@ trait ShuntAuth
         ], $overrides);
 
         Http::fake([
-            rtrim(config('yard.shunt.base_url'), '/') . '/api/oauth/me' => Http::response([
+            rtrim(config('api.auth.base_url'), '/') . '/api/oauth/me' => Http::response([
                 'data' => $actor,
             ]),
         ]);
@@ -38,7 +38,28 @@ trait ShuntAuth
         return $actor;
     }
 
-    protected function actingAsShuntUser(array $jwtPayload = [])
+    protected function createLocalUser(array $overrides = []): \App\Models\User
+    {
+        $data = array_merge([
+            'auth_user_id' => 'user-123',
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'status' => 'active',
+        ], $overrides);
+
+        return \App\Models\User::query()->updateOrCreate(
+            [
+                'auth_user_id' => $data['auth_user_id'],
+            ],
+            [
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'status' => $data['status'],
+            ],
+        );
+    }
+
+    protected function actingAsAuthUser(array $jwtPayload = [])
     {
         $token = $this->makeFakeJwt(array_merge([
             'scopes' => ['profile.read'],

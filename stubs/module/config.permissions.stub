@@ -1,0 +1,18 @@
+<?php
+
+return [
+    'permissions' => [
+        '{{ module }}.read',
+        '{{ module }}.write',
+    ],
+
+    'roles' => [
+        '{{ module }}-manager' => [
+            '{{ module }}.read',
+            '{{ module }}.write',
+        ],
+        '{{ module }}-viewer' => [
+            '{{ module }}.read',
+        ],
+    ],
+];

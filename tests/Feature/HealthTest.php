@@ -7,11 +7,11 @@ it('returns health', function () {
 });
 
 it('returns enabled modules when authenticated with organisation context', function () {
-    config()->set('yard.modules', ['catalog', 'inventory']);
+    config()->set('api.modules', ['catalog', 'inventory']);
 
-    $this->fakeShuntActor();
+    $this->fakeAuthActor();
 
-    $this->actingAsShuntUser()
+    $this->actingAsAuthUser()
         ->getJson('/api/modules')
         ->assertOk()
         ->assertJson([

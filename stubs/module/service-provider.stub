@@ -1,0 +1,24 @@
+<?php
+
+namespace Modules\{{ moduleStudly }}\Providers;
+
+use App\Modules\ModuleServiceProvider;
+
+class {{ moduleStudly }}ServiceProvider extends ModuleServiceProvider
+{
+    public static function moduleKey(): string
+    {
+        return '{{ module }}';
+    }
+
+    public function register(): void
+    {
+        $this->mergeModuleConfig('module.php', 'api.modules.{{ module }}');
+    }
+
+    public function boot(): void
+    {
+        $this->bootModuleRoutes();
+        $this->bootModuleMigrations();
+    }
+}

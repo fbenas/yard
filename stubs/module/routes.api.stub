@@ -1,0 +1,18 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+Route::middleware(['auth.auth', 'auth.org'])
+    ->prefix('{{ module }}')
+    ->group(function () {
+        Route::get('/', function () {
+            abort_unless(actor_can('{{ module }}.read'), 403);
+
+            return [
+                'data' => [
+                    'module' => '{{ module }}',
+                    'organisation_id' => current_organisation_id(),
+                ],
+            ];
+        });
+    });
