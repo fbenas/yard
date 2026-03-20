@@ -6,8 +6,9 @@ return [
         'timeout' => (int) env('AUTH_TIMEOUT', 5),
     ],
 
-    'modules' => array_values(array_filter(array_map(
-        'trim',
-        explode(',', (string) env('API_ENABLED_MODULES', ''))
-    ))),
+    'modules' => collect(explode(',', (string) env('API_ENABLED_MODULES', '')))
+        ->map(fn (string $module) => trim($module))
+        ->filter()
+        ->mapWithKeys(fn (string $module) => [$module => []])
+        ->all(),
 ];

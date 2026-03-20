@@ -8,23 +8,26 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
-class SyncModulePermissions extends Command
+class SyncPermissions extends Command
 {
     protected $signature = 'api:sync-permissions';
 
-    protected $description = 'Sync permissions and roles from enabled API modules';
+    protected $description = 'Sync permissions and roles from core and enabled API modules';
 
     public function handle(): int
     {
+        foreach (config('permissions.permissions', []) as $permissionName) {
+            Permission::findOrCreate($permissionName);
+            $this->line("Permission ready: {$permissionName}");
+        }
+
         $modules = config('api.modules', []);
 
         if ($modules === []) {
             $this->warn('No enabled modules configured.');
-
-            return self::SUCCESS;
         }
 
-        foreach ($modules as $module) {
+        foreach ($modules as $module => $value) {
             $path = base_path("modules/" . ucfirst($module) . "/config/permissions.php");
             if (! File::exists($path)) {
                 $this->warn("No permissions config found for module [{$module}] at [{$path}]");

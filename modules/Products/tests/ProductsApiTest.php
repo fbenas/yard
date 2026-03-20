@@ -15,8 +15,7 @@ it('returns products for authorised users', function () {
     $user->givePermissionTo('products.read');
 
     $this->actingAsAuthUser()
-        ->withOrganisation('org-1')
-        ->getJson('/api/products/list')
+        ->getJson('/api/org-1/products')
         ->assertOk()
         ->assertJsonPath('data.module', 'products')
         ->assertJsonPath('data.organisation_id', 'org-1');

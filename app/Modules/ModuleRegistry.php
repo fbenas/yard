@@ -15,6 +15,7 @@ class ModuleRegistry
     public function all(): array
     {
         return collect($this->enabled())
+            ->keys()
             ->map(fn (string $module) => $this->moduleDefinition($module))
             ->filter()
             ->values()

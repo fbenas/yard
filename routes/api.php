@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\PermissionController;
+use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\UserController;
 use App\Support\CurrentActor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,8 +36,6 @@ Route::middleware('auth.user')->group(function () {
     });
 });
 
-
-
 Route::middleware(['auth.user', 'auth.org'])->group(function () {
     Route::get('/context', function () {
         return [
@@ -44,4 +45,20 @@ Route::middleware(['auth.user', 'auth.org'])->group(function () {
             ],
         ];
     });
+});
+
+Route::middleware(['auth.user', 'auth.org'])->prefix('api')->group(function () {
+    Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users/{user}', [UserController::class, 'show']);
+    Route::put('/users/{user}/roles', [UserController::class, 'syncRoles']);
+    Route::put('/users/{user}/permissions', [UserController::class, 'syncPermissions']);
+
+    Route::get('/roles', [RoleController::class, 'index']);
+    Route::get('/roles/{role}', [RoleController::class, 'show']);
+    Route::post('/roles', [RoleController::class, 'store']);
+    Route::put('/roles/{role}', [RoleController::class, 'update']);
+    Route::delete('/roles/{role}', [RoleController::class, 'destroy']);
+
+    Route::get('/permissions', [PermissionController::class, 'index']);
+    Route::get('/permissions/{permission}', [PermissionController::class, 'show']);
 });

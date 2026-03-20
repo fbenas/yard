@@ -11,7 +11,8 @@ class AppServiceProvider extends ServiceProvider
     {
         $registry = $this->app->make(ModuleRegistry::class);
 
-        foreach ($registry->all() as $module) {
+        foreach ($registry->all() as $module_key => $module) {
+
             $providerPath = $module['provider_path'];
             $providerClass = $module['provider_class'];
 
