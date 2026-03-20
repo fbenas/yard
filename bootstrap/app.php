@@ -13,7 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'auth.auth' => \App\Http\Middleware\ResolveAuthActor::class,
+            'auth.user' => \App\Http\Middleware\ResolveAuthActor::class,
             'auth.org' => \App\Http\Middleware\RequireOrganisation::class,
         ]);
     })

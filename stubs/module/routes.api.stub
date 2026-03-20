@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth.auth', 'auth.org'])
+Route::middleware(['auth.user', 'auth.org'])
     ->prefix('{{ module }}')
     ->group(function () {
         Route::get('/', function () {

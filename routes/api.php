@@ -11,7 +11,7 @@ Route::get('/health', function () {
     ];
 });
 
-Route::middleware('auth.auth')->group(function () {
+Route::middleware('auth.user')->group(function () {
     Route::get('/version', function () {
         return [
             'app' => config('app.name'),
@@ -33,7 +33,9 @@ Route::middleware('auth.auth')->group(function () {
     });
 });
 
-Route::middleware(['auth.auth', 'auth.org'])->group(function () {
+
+
+Route::middleware(['auth.user', 'auth.org'])->group(function () {
     Route::get('/context', function () {
         return [
             'data' => [
