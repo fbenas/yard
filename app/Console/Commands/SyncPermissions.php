@@ -64,6 +64,18 @@ class SyncPermissions extends Command
             }
         }
 
+        $allPermissions = Permission::query()->pluck('name')->all();
+
+        $superAdmin = Role::firstOrCreate([
+            'name' => 'super_admin',
+            'guard_name' => 'web',
+            'organisation_id' => null,
+        ]);
+
+        $superAdmin->syncPermissions($allPermissions);
+
+        $this->info('Super admin role synced with all permissions.');
+
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
         $this->info('Permission sync complete.');

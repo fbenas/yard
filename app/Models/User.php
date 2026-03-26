@@ -2,33 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
+use YardAbstracts\Models\User as AbstractUser;
 
-class User extends Authenticatable
+class User extends AbstractUser
 {
-    use HasFactory, Notifiable , HasRoles;
-
-    protected $fillable = [
-        'auth_user_id',
-        'name',
-        'email',
-        'status',
-        'password',
-    ];
-
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
 }
