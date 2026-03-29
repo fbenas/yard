@@ -2,11 +2,10 @@
 
 return [
     'permissions' => [
-        'products.read',
-        'products.write',
-    ],
-
-    'roles' => [
-    ],
-
+        'products.list',
+        'products.view',
+        'products.create',
+        'products.update',
+        'products.delete',
+    ]
 ];

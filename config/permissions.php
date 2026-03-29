@@ -3,23 +3,17 @@
 return [
     'permissions' => [
         'users.list',
-        'users.read',
+        'users.view',
         'users.create',
         'users.update',
         'users.delete',
 
         'roles.list',
-        'roles.read',
+        'roles.view',
         'roles.create',
         'roles.update',
         'roles.delete',
-
-        'permissions.list',
-        'permissions.read',
         'roles.assign',
         'permissions.assign',
-    ],
-
-    'roles' => [
     ],
 ];
