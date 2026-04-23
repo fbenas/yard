@@ -22,12 +22,6 @@ Route::middleware('auth.user')->group(function () {
         ];
     });
 
-    Route::get('/modules', function () {
-        return [
-            'data' => config('api.modules', []),
-        ];
-    });
-
     Route::get('/me', function (Request $request) {
         /** @var CurrentActor $actor */
         return [
@@ -62,3 +56,19 @@ Route::middleware(['auth.user', 'auth.org'])->prefix('api')->group(function () {
     Route::get('/permissions', [PermissionController::class, 'index']);
     Route::get('/permissions/{permission}', [PermissionController::class, 'show']);
 });
+
+Route::middleware(['auth.user'])
+    ->prefix('api/{organisation}')
+    ->group(function () {
+        Route::get('/products', function (string $organisation) {
+            abort_unless(current_actor()->hasOrganisation($organisation), 403);
+            abort_unless(actor_can('products.read'), 403);
+
+            return [
+                'data' => [
+                    'module' => 'products',
+                    'organisation_id' => $organisation,
+                ]
+            ];
+        });
+    });

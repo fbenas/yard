@@ -15,5 +15,11 @@ return [
         'roles.delete',
         'roles.assign',
         'permissions.assign',
+
+        'products.list',
+        'products.view',
+        'products.create',
+        'products.update',
+        'products.delete',
     ],
 ];

@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'shunt' => [
+        'base_url' => env('SHUNT_BASE_URL'),
+        'client_id' => env('SHUNT_CLIENT_ID'),
+        'client_secret' => env('SHUNT_CLIENT_SECRET'),
+        'redirect_uri' => env('SHUNT_REDIRECT_URI'),
+    ],
+
 ];
