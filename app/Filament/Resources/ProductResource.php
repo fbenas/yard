@@ -2,15 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\Product;
 use App\Filament\Resources\ProductResource\Pages;
+use App\Models\Product;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProductResource extends Resource
 {
@@ -20,10 +22,6 @@ class ProductResource extends Resource
 
     protected static ?string $navigationLabel = 'Products';
 
-    protected static ?string $modelLabel = 'Product';
-
-    protected static ?string $pluralModelLabel = 'Products';
-
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
@@ -32,6 +30,15 @@ class ProductResource extends Resource
                     TextInput::make('name')
                         ->required()
                         ->maxLength(255),
+
+                    TextInput::make('description')
+                        ->maxLength(1000),
+
+                    KeyValue::make('variant_dimensions')
+                        ->label('Variant dimensions')
+                        ->keyLabel('Key')
+                        ->valueLabel('Label')
+                        ->addActionLabel('Add dimension'),
                 ]),
         ]);
     }
@@ -44,20 +51,23 @@ class ProductResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('status')
+                    ->badge(),
 
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('variants_count')
+                    ->counts('variants')
+                    ->label('Variants'),
             ])
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('organisation_id', auth()->user()->current_organisation_id);
     }
 
     public static function getPages(): array

@@ -27,6 +27,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'auth_user_id',
         'name',
         'current_organisation_id',
+        'organisations',
         'email',
         'status',
         'password',
@@ -35,6 +36,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    protected $casts = [
+        'organisations' => 'array',
     ];
 
     protected function casts(): array
@@ -60,6 +65,20 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->roles()
             ->wherePivot('organisation_id', $organisationId)
             ->pluck('name')
+            ->values()
+            ->all();
+    }
+
+    public function hasOrganisation(string $organisationId): bool
+    {
+        return collect($this->getAvailableOrganisations())
+            ->contains(fn (array $organisation) => ($organisation['id'] ?? null) === $organisationId);
+    }
+
+    public function getAvailableOrganisations(): array
+    {
+        return collect($this->organisations ?? [])
+            ->filter(fn ($organisation) => is_array($organisation))
             ->values()
             ->all();
     }

@@ -84,10 +84,13 @@ class ShuntAuthController
             ->filter()
             ->values();
 
+        $user->organisations = $organisations;
+
         if (! $user->current_organisation_id || ! $organisationIds->contains($user->current_organisation_id)) {
             $user->current_organisation_id = $organisationIds->first();
-            $user->save();
         }
+
+        $user->save();
 
         Auth::login($user);
         $request->session()->regenerate();

@@ -10,9 +10,14 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->string('organisation_id', 26);
             $table->string('name');
-            $table->string('organisation_id', 26)->nullable();
+            $table->text('description')->nullable();
+            $table->json('variant_dimensions')->nullable();
+            $table->string('status')->default('active');
             $table->timestamps();
+
+            $table->index('organisation_id');
         });
     }
 

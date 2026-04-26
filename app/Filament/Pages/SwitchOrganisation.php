@@ -2,8 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\AdminUser;
-use App\Support\PermissionScopes;
+use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -25,8 +24,7 @@ class SwitchOrganisation extends Page
     {
         $user = Auth::user();
 
-        abort_unless($user instanceof AdminUser, 403);
-
+        abort_unless($user instanceof User, 403);
         $this->organisations = $user->getAvailableOrganisations();
         $this->currentOrganisationId = $user->current_organisation_id;
     }
@@ -35,7 +33,7 @@ class SwitchOrganisation extends Page
     {
         $user = Auth::user();
 
-        abort_unless($user instanceof AdminUser, 403);
+        abort_unless($user instanceof User, 403);
 
         abort_unless(
             $user->hasOrganisation($organisationId),

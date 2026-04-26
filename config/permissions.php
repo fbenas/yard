@@ -21,5 +21,17 @@ return [
         'products.create',
         'products.update',
         'products.delete',
+
+        'product_variants.list',
+        'product_variants.view',
+        'product_variants.create',
+        'product_variants.update',
+        'product_variants.delete',
+
+        'inventory_items.list',
+        'inventory_items.view',
+        'inventory_items.create',
+        'inventory_items.update',
+        'inventory_items.delete',
     ],
 ];
